@@ -23,7 +23,7 @@
   width: 100px;
   cursor: pointer;
   border: none;
-  margin-right: 7px;
+  margin-right: 20px;
   background-color: #8288ae;
   border-radius: 2px;
 }
@@ -46,8 +46,6 @@ body {
 
 .form {
   border-radius: 4px;
-  padding: 40px;
-  background-repeat: no-repeat;
   align-self: center;
   justify-self: center;
 }
@@ -68,15 +66,18 @@ body {
   justify-content: center;
 }
 
+#isbn {
+  margin-left: 52px;
+}
 #book {
   margin-left: 7.5px;
 }
 #author {
-  margin-left: 2.5px;
+  margin-left: 75px;
 }
 
 #pages {
-  margin-left: 78px;
+  margin-left: 139px;
 }
 
 input[type="text"],
@@ -116,16 +117,51 @@ label.box {
 .buttons {
   margin: 5px;
   padding: 5px;
-  background-color: #949ac2;
+  background-color: #cbcdd4;
   border: none;
   cursor: pointer;
   border-radius: 2px;
 }
 
+.footer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.cards {
+  height: 40vh;
+  width: 60vw;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.newDiv {
+  width: 12vw;
+  height: 40vh;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  margin-right: 5px;
+  border-radius: 3px 0.5px 0.5px 3px;
+  padding: 5px;
+}
+
+.newDiv:hover {
+  transform: translate(0, -10px) skew(-3deg, 3deg) scale(1.1);
+  cursor: pointer;
+}
+
+//bookshelf code - https://codepen.io/ekfuhrmann/pen/OJmRVPj
 .bookshelf {
   // bookshelf top
   max-width: 1000px;
-  width: 80%;
+  width: 80vw;
   display: flex;
   justify-content: center;
   flex-shrink: 0;
@@ -168,5 +204,3 @@ label.box {
     z-index: -1;
   }
 }
-
-//bookshelf code - https://codepen.io/ekfuhrmann/pen/OJmRVPj

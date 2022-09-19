@@ -2,7 +2,7 @@ let myLibrary = [];
 const form = document.querySelector(".form");
 const addbook = document.querySelector(".addbook");
 const closeForm = document.querySelector(".closeForm");
-// const bookshelf = document.querySelector(".bookshelf");
+const cards = document.querySelector(".cards");
 
 form.style.display = "none";
 closeForm.style.display = "none";
@@ -12,18 +12,20 @@ addbook.addEventListener("click", () => {
   closeForm.style.display = "block";
 });
 
+//needs fixing - acts like submit button - check event targeter
 closeForm.addEventListener("click", () => {
   form.style.display = "none";
   closeForm.style.display = "none";
 });
 
-function Book(title, author, pages, read) {
+function Book(isbn, title, author, pages, read) {
+  this.isbn = isbn;
   this.title = title;
   this.author = author;
   this.pages = pages;
   this.read = read;
   this.info = function () {
-    return `Title: ${title} Author: ${author} Pages: ${pages}`;
+    return ``;
   };
 }
 
@@ -32,6 +34,7 @@ form.addEventListener("submit", (e) => {
   let formValue = e.target;
 
   let nameOfTheBook = new Book(
+    formValue.isbn.value,
     formValue.book.value,
     formValue.author.value,
     formValue.pages.value,
@@ -49,17 +52,20 @@ form.addEventListener("submit", (e) => {
   newDiv.appendChild(newButton);
   newButton.appendChild(text);
   document.body.insertBefore(newDiv, before);
-  // bookshelf.appendChild(newDiv);
 
   const readButton = document.createElement("button");
   const buttonText = document.createTextNode("Read");
   const buttonNotRead = document.createTextNode("Not read");
-
   newDiv.appendChild(readButton);
 
   newDiv.className = "newDiv";
   newButton.className = "buttons";
   readButton.className = "buttons";
+  let isbn = Number(nameOfTheBook.isbn);
+  newDiv.style.backgroundImage =
+    "url('https://covers.openlibrary.org/b/isbn/" + isbn + "-M.jpg')";
+
+  cards.appendChild(newDiv);
 
   formValue.read.checked
     ? readButton.appendChild(buttonText)
@@ -69,8 +75,7 @@ form.addEventListener("submit", (e) => {
     newDiv.remove();
   });
 
-  //popravit ovo togglanje
-
+  //toggle error when read is first - readButton is not defined
   readButton.addEventListener("click", () => {
     formValue.read.checked = formValue.read.checked !== true;
     formValue.read.checked
@@ -78,19 +83,16 @@ form.addEventListener("submit", (e) => {
         readButton.removeChild(buttonNotRead)
       : readButton.appendChild(buttonNotRead) &&
         readButton.removeChild(buttonText);
-
-    formValue.read.checked === false;
   });
 
   form.style.display = "none";
   closeForm.style.display = "none";
-  (formValue.book.value = ""),
+  (formValue.isbn.value = ""),
+    (formValue.book.value = ""),
     (formValue.author.value = ""),
     (formValue.pages.value = ""),
     (formValue.read.checked = false);
 });
 
-//uredit kartice da su elementi jedan ispod drugog
 // kad krenes pisat dobiješ prijedloge iz knjiznice - API
 // Napravit arhivu - korisnik se logira i može unutar svojeg usernamea spremat liste
-// https://github.com/w3slley/bookcover-api

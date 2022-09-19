@@ -17,14 +17,19 @@
     <button class="addbook">+ Add book</button>
 
     <div class="form">
-      <form action="" method="post" id="form" autocomplete="on">
+      <form action="" method="post" id="form">
+        <div class="bookName">
+          <label for="book"> Book ISBN: </label><br />
+          <input type="text" id="isbn" name="" required />
+        </div>
+
         <div class="bookName">
           <label for="book"> Name of the book: </label><br />
           <input type="text" id="book" name="" required />
         </div>
 
         <div class="author">
-          <label for="author">Author of the book: </label><br />
+          <label for="author">Author: </label><br />
           <input type="text" id="author" name="" required />
         </div>
 
@@ -52,13 +57,16 @@
 
         <div class="submit">
           <input type="submit" id="submit" value="Submit" />
-          <button class="closeForm">Close Form</button>
+          <button class="closeForm" id="closeForm" value="closedForm">
+            Close Form
+          </button>
         </div>
       </form>
     </div>
-
-    <div class="card"></div>
-    <div class="bookshelf"></div>
+    <div class="footer">
+      <div class="cards"></div>
+      <div class="bookshelf"></div>
+    </div>
   </body>
   <script src="./main.js"></script>
 </html>
