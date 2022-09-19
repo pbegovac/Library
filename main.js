@@ -2,7 +2,7 @@ let myLibrary = [];
 const form = document.querySelector(".form");
 const addbook = document.querySelector(".addbook");
 const closeForm = document.querySelector(".closeForm");
-const bookshelf = document.querySelector(".bookshelf");
+// const bookshelf = document.querySelector(".bookshelf");
 
 form.style.display = "none";
 closeForm.style.display = "none";
@@ -49,7 +49,7 @@ form.addEventListener("submit", (e) => {
   newDiv.appendChild(newButton);
   newButton.appendChild(text);
   document.body.insertBefore(newDiv, before);
-  bookshelf.appendChild(newDiv);
+  // bookshelf.appendChild(newDiv);
 
   const readButton = document.createElement("button");
   const buttonText = document.createTextNode("Read");
@@ -60,8 +60,6 @@ form.addEventListener("submit", (e) => {
   newDiv.className = "newDiv";
   newButton.className = "buttons";
   readButton.className = "buttons";
-
-  console.log(readButton.children);
 
   formValue.read.checked
     ? readButton.appendChild(buttonText)

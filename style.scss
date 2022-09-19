@@ -123,6 +123,7 @@ label.box {
 }
 
 .bookshelf {
+  // bookshelf top
   max-width: 1000px;
   width: 80%;
   display: flex;
@@ -136,34 +137,36 @@ label.box {
   border-left: 20px solid transparent;
   border-right: 20px solid transparent;
   pointer-events: all;
+
+  // bookshelf front-side
+  &::before {
+    content: "";
+    position: absolute;
+    top: 16px;
+    background: linear-gradient(90deg, #fafafa 0%, #ffffff 100%);
+    height: 26px;
+    width: calc(100% + 40px);
+    box-shadow: 0px -1px 6px rgba(0, 0, 0, 0.05),
+      0px 4px 16px rgba(0, 0, 0, 0.25);
+    z-index: 2;
+  }
+
+  // bookshelf drop-shadow
+  &::after {
+    content: "";
+    height: 80px;
+    width: calc(100% + 40px);
+    position: absolute;
+    top: 42px;
+    display: block;
+    background: linear-gradient(
+      180deg,
+      #f3f3f3 0%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    clip-path: polygon(0% 0%, 100% 0%, 97% 100%, 3% 100%);
+    z-index: -1;
+  }
 }
 
 //bookshelf code - https://codepen.io/ekfuhrmann/pen/OJmRVPj
-// &::before {
-//   content: "";
-//   position: absolute;
-//   top: 16px;
-//   background: linear-gradient(90deg, #fafafa 0%, #ffffff 100%);
-//   height: 26px;
-//   width: calc(100% + 40px);
-//   box-shadow: 0px -1px 6px rgba(0, 0, 0, 0.05),
-//     0px 4px 16px rgba(0, 0, 0, 0.25);
-//   z-index: 2;
-// }
-
-// // bookshelf drop-shadow
-// &::after {
-//   content: "";
-//   height: 80px;
-//   width: calc(100% + 40px);
-//   position: absolute;
-//   top: 42px;
-//   display: block;
-//   background: linear-gradient(
-//     180deg,
-//     #f3f3f3 0%,
-//     rgba(255, 255, 255, 0) 100%
-//   );
-//   clip-path: polygon(0% 0%, 100% 0%, 97% 100%, 3% 100%);
-//   z-index: -1;
-// }
