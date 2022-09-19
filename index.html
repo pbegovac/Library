@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@1,300&display=swap"
+      rel="stylesheet"
+    />
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button class="addbook">+ Add book</button>
+
+    <div class="form">
+      <form action="" method="post" id="form" autocomplete="on">
+        <div class="bookName">
+          <label for="book"> Name of the book: </label><br />
+          <input type="text" id="book" name="" required />
+        </div>
+
+        <div class="author">
+          <label for="author">Author of the book: </label><br />
+          <input type="text" id="author" name="" required />
+        </div>
+
+        <div class="pages">
+          <label for="pages">Pages: </label><br />
+          <input
+            type="number"
+            id="pages"
+            name=""
+            value=""
+            min="1"
+            max="100000000"
+            required
+          />
+        </div>
+
+        <div class="read">
+          <!-- <label class="switch">
+            <input type="checkbox" id="" />
+            <span class="slider round"></span>
+          </label> -->
+          <label class="box">Have you read this book? </label>
+          <input type="checkbox" id="read" name="" />
+        </div>
+
+        <div class="submit">
+          <input type="submit" id="submit" value="Submit" />
+          <button class="closeForm">Close Form</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="card"></div>
+    <div class="bookshelf"></div>
+  </body>
+  <script src="./main.js"></script>
+</html>
