@@ -48,7 +48,7 @@ body {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  height: 90vh;
+  height: 92vh;
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
@@ -168,7 +168,7 @@ label.box {
 
 .cards {
   height: 40vh;
-  width: 60vw;
+  width: 85vw;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -207,8 +207,7 @@ label.box {
 }
 
 .bookshelf {
-  max-width: 1000px;
-  width: 80vw;
+  width: 90vw;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;

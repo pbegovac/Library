@@ -16,6 +16,11 @@ addbook.addEventListener("click", () => {
 closeForm.addEventListener("click", () => {
   form.style.display = "none";
   closeForm.style.display = "none";
+  isbn.value = "";
+  book.value = "";
+  author.value = "";
+  pages.value = "";
+  read.checked = false;
 });
 
 function Book(isbn, title, author, pages, read) {
@@ -25,7 +30,7 @@ function Book(isbn, title, author, pages, read) {
   this.pages = pages;
   this.read = read;
   this.info = function () {
-    return ``;
+    return `${title} by ${author}, ${pages} pages`;
   };
 }
 
@@ -44,11 +49,10 @@ form.addEventListener("submit", (e) => {
   myLibrary.push(nameOfTheBook.info());
 
   const newDiv = document.createElement("div");
-  const content = document.createTextNode(myLibrary.shift());
   const newButton = document.createElement("button");
   const text = document.createTextNode("Remove");
   const before = document.querySelector(".before");
-  newDiv.appendChild(content);
+
   newDiv.appendChild(newButton);
   newButton.appendChild(text);
   document.body.insertBefore(newDiv, before);
@@ -56,16 +60,38 @@ form.addEventListener("submit", (e) => {
   const readButton = document.createElement("button");
   const buttonText = document.createTextNode("Read");
   const buttonNotRead = document.createTextNode("Not read");
+  const infoButton = document.createElement("button");
+  const infoText = document.createTextNode("Info");
   newDiv.appendChild(readButton);
+  infoButton.appendChild(infoText);
+  newDiv.appendChild(infoButton);
 
   newDiv.className = "newDiv";
   newButton.className = "buttons";
   readButton.className = "buttons";
+  infoButton.className = "buttons";
+
   let isbn = Number(nameOfTheBook.isbn);
+  let bookName = nameOfTheBook.title;
+  let authorName = nameOfTheBook.author;
   newDiv.style.backgroundImage =
     "url('https://covers.openlibrary.org/b/isbn/" + isbn + "-M.jpg')";
 
   cards.appendChild(newDiv);
+
+  infoButton.addEventListener("click", () => {
+    fetch(
+      "https://www.googleapis.com/books/v1/volumes?q=" +
+        bookName +
+        "+inauthor:" +
+        authorName +
+        "&key=AIzaSyD5KjQTgCkvSbn5Pr-UIVtvuF4JV0dRkBQ"
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+      });
+  });
 
   formValue.read.checked
     ? readButton.appendChild(buttonText)
