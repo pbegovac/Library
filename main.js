@@ -16,15 +16,13 @@ addbook.addEventListener("click", () => {
 closeForm.addEventListener("click", () => {
   form.style.display = "none";
   closeForm.style.display = "none";
-  isbn.value = "";
   book.value = "";
   author.value = "";
   pages.value = "";
   read.checked = false;
 });
 
-function Book(isbn, title, author, pages, read) {
-  this.isbn = isbn;
+function Book(title, author, pages, read) {
   this.title = title;
   this.author = author;
   this.pages = pages;
@@ -39,7 +37,6 @@ form.addEventListener("submit", (e) => {
   let formValue = e.target;
 
   let nameOfTheBook = new Book(
-    formValue.isbn.value,
     formValue.book.value,
     formValue.author.value,
     formValue.pages.value,
@@ -49,11 +46,15 @@ form.addEventListener("submit", (e) => {
   myLibrary.push(nameOfTheBook.info());
 
   const newDiv = document.createElement("div");
+  const buttonsDiv = document.createElement("div");
+  const textDiv = document.createElement("div");
   const newButton = document.createElement("button");
   const text = document.createTextNode("Remove");
   const before = document.querySelector(".before");
 
-  newDiv.appendChild(newButton);
+  buttonsDiv.appendChild(newButton);
+  newDiv.appendChild(buttonsDiv);
+  newDiv.appendChild(textDiv);
   newButton.appendChild(text);
   document.body.insertBefore(newDiv, before);
 
@@ -62,37 +63,66 @@ form.addEventListener("submit", (e) => {
   const buttonNotRead = document.createTextNode("Not read");
   const infoButton = document.createElement("button");
   const infoText = document.createTextNode("Info");
-  newDiv.appendChild(readButton);
+  const defaultText = document.createTextNode(myLibrary.shift());
+  textDiv.appendChild(defaultText);
+  newDiv.appendChild(textDiv);
+
+  buttonsDiv.appendChild(readButton);
   infoButton.appendChild(infoText);
-  newDiv.appendChild(infoButton);
+  buttonsDiv.appendChild(infoButton);
 
   newDiv.className = "newDiv";
   newButton.className = "buttons";
   readButton.className = "buttons";
   infoButton.className = "buttons";
+  buttonsDiv.className = "buttonsDiv";
+  textDiv.className = "textDiv";
 
-  let isbn = Number(nameOfTheBook.isbn);
   let bookName = nameOfTheBook.title;
   let authorName = nameOfTheBook.author;
-  newDiv.style.backgroundImage =
-    "url('https://covers.openlibrary.org/b/isbn/" + isbn + "-M.jpg')";
+
+  fetch(
+    "https://www.googleapis.com/books/v1/volumes?q=" +
+      bookName +
+      "+inauthor:" +
+      authorName +
+      "&key=AIzaSyD5KjQTgCkvSbn5Pr-UIVtvuF4JV0dRkBQ"
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      console.log(data.items[0].volumeInfo);
+      const bookTitle = data.items[0].volumeInfo.title;
+      const bookAuthor = data.items[0].volumeInfo.authors[0];
+      const bookISBN = data.items[0].volumeInfo.industryIdentifiers;
+
+      if (bookISBN.length <= 1) {
+        newDiv.style.backgroundImage = "url('./default_book_cover.jpg')";
+      } else {
+        const bookISBN13 =
+          data.items[0].volumeInfo.industryIdentifiers[1].identifier;
+        newDiv.style.backgroundImage =
+          "url('https://covers.openlibrary.org/b/isbn/" +
+          bookISBN13 +
+          "-M.jpg')";
+        textDiv.style.display = "none";
+      }
+
+      const bookPages = data.items[0].volumeInfo.pageCount;
+      const bookDescription = data.items[0].volumeInfo.description;
+
+      infoButton.addEventListener("click", () => {
+        alert(bookDescription);
+      });
+
+      console.log(bookTitle);
+      console.log(bookAuthor);
+      console.log(bookISBN);
+      console.log(bookPages);
+      console.log(bookDescription);
+    });
 
   cards.appendChild(newDiv);
-
-  infoButton.addEventListener("click", () => {
-    fetch(
-      "https://www.googleapis.com/books/v1/volumes?q=" +
-        bookName +
-        "+inauthor:" +
-        authorName +
-        "&key=AIzaSyD5KjQTgCkvSbn5Pr-UIVtvuF4JV0dRkBQ"
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-      });
-  });
-
   formValue.read.checked
     ? readButton.appendChild(buttonText)
     : readButton.appendChild(buttonNotRead);
@@ -113,8 +143,7 @@ form.addEventListener("submit", (e) => {
 
   form.style.display = "none";
   closeForm.style.display = "none";
-  (formValue.isbn.value = ""),
-    (formValue.book.value = ""),
+  (formValue.book.value = ""),
     (formValue.author.value = ""),
     (formValue.pages.value = ""),
     (formValue.read.checked = false);

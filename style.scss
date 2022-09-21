@@ -66,9 +66,6 @@ body {
   justify-content: center;
 }
 
-#isbn {
-  margin-left: 52px;
-}
 #book {
   margin-left: 7.5px;
 }
@@ -123,6 +120,10 @@ label.box {
   border-radius: 2px;
 }
 
+.textColor {
+  color: #efede5;
+}
+
 .footer {
   display: flex;
   flex-direction: column;
@@ -140,16 +141,32 @@ label.box {
 
 .newDiv {
   width: 12vw;
+  min-width: 40px;
   height: 40vh;
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
   display: flex;
-  justify-content: center;
-  align-items: flex-end;
+  flex-direction: column-reverse;
+  justify-content: space-between;
   margin-right: 5px;
   border-radius: 3px 0.5px 0.5px 3px;
   padding: 5px;
+}
+
+.buttonsDiv {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.textDiv {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
+  color: #efede5;
 }
 
 .newDiv:hover {
