@@ -47,14 +47,14 @@ form.addEventListener("submit", (e) => {
 
   const newDiv = document.createElement("div");
   const buttonsDiv = document.createElement("div");
-  const textDiv = document.createElement("div");
+
   const newButton = document.createElement("button");
   const text = document.createTextNode("Remove");
   const before = document.querySelector(".before");
 
   buttonsDiv.appendChild(newButton);
   newDiv.appendChild(buttonsDiv);
-  newDiv.appendChild(textDiv);
+
   newButton.appendChild(text);
   document.body.insertBefore(newDiv, before);
 
@@ -63,9 +63,6 @@ form.addEventListener("submit", (e) => {
   const buttonNotRead = document.createTextNode("Not read");
   const infoButton = document.createElement("button");
   const infoText = document.createTextNode("Info");
-  const defaultText = document.createTextNode(myLibrary.shift());
-  textDiv.appendChild(defaultText);
-  newDiv.appendChild(textDiv);
 
   buttonsDiv.appendChild(readButton);
   infoButton.appendChild(infoText);
@@ -76,7 +73,6 @@ form.addEventListener("submit", (e) => {
   readButton.className = "buttons";
   infoButton.className = "buttons";
   buttonsDiv.className = "buttonsDiv";
-  textDiv.className = "textDiv";
 
   let bookName = nameOfTheBook.title;
   let authorName = nameOfTheBook.author;
@@ -91,22 +87,12 @@ form.addEventListener("submit", (e) => {
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
-      console.log(data.items[0].volumeInfo);
       const bookTitle = data.items[0].volumeInfo.title;
       const bookAuthor = data.items[0].volumeInfo.authors[0];
-      const bookISBN = data.items[0].volumeInfo.industryIdentifiers;
 
-      if (bookISBN.length <= 1) {
-        newDiv.style.backgroundImage = "url('./default_book_cover.jpg')";
-      } else {
-        const bookISBN13 =
-          data.items[0].volumeInfo.industryIdentifiers[1].identifier;
-        newDiv.style.backgroundImage =
-          "url('https://covers.openlibrary.org/b/isbn/" +
-          bookISBN13 +
-          "-M.jpg')";
-        textDiv.style.display = "none";
-      }
+      const bookCover = data.items[0].volumeInfo.imageLinks.thumbnail;
+      console.log(bookCover);
+      newDiv.style.backgroundImage = "url(" + bookCover + ")";
 
       const bookPages = data.items[0].volumeInfo.pageCount;
       const bookDescription = data.items[0].volumeInfo.description;
@@ -117,7 +103,7 @@ form.addEventListener("submit", (e) => {
 
       console.log(bookTitle);
       console.log(bookAuthor);
-      console.log(bookISBN);
+
       console.log(bookPages);
       console.log(bookDescription);
     });

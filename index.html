@@ -18,15 +18,15 @@
     <button class="addbook">+ Add book</button>
 
     <div class="form">
-      <form action="" method="post" id="form">
+      <form action="" method="post" id="form" autocomplete="off">
         <div class="bookName">
           <label for="book"> Name of the book: </label><br />
-          <input type="text" id="book" name="" required />
+          <input type="text" id="book" name="Book" required />
         </div>
 
         <div class="author">
           <label for="author">Author: </label><br />
-          <input type="text" id="author" name="" required />
+          <input type="text" id="author" name="Author" required />
         </div>
 
         <div class="pages">
@@ -34,7 +34,7 @@
           <input
             type="number"
             id="pages"
-            name=""
+            name="Pages"
             value=""
             min="1"
             max="100000000"
@@ -43,12 +43,8 @@
         </div>
 
         <div class="read">
-          <!-- <label class="switch">
-            <input type="checkbox" id="" />
-            <span class="slider round"></span>
-          </label> -->
           <label class="box">Have you read this book? </label>
-          <input type="checkbox" id="read" name="" />
+          <input type="checkbox" id="read" name="Read" />
         </div>
 
         <div class="submit">
@@ -65,4 +61,5 @@
     </div>
   </body>
   <script src="./main.js"></script>
+  <script src="./autocomplete.js"></script>
 </html>
