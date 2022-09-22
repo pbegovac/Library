@@ -1,4 +1,6 @@
 let myLibrary = [];
+let titles = [];
+let authors = [];
 const form = document.querySelector(".form");
 const addbook = document.querySelector(".addbook");
 const closeForm = document.querySelector(".closeForm");
@@ -44,6 +46,9 @@ form.addEventListener("submit", (e) => {
   );
 
   myLibrary.push(nameOfTheBook.info());
+  console.log(myLibrary);
+
+  console.log(formValue.book.value);
 
   const newDiv = document.createElement("div");
   const buttonsDiv = document.createElement("div");
@@ -89,9 +94,7 @@ form.addEventListener("submit", (e) => {
       console.log(data);
       const bookTitle = data.items[0].volumeInfo.title;
       const bookAuthor = data.items[0].volumeInfo.authors[0];
-
       const bookCover = data.items[0].volumeInfo.imageLinks.thumbnail;
-      console.log(bookCover);
       newDiv.style.backgroundImage = "url(" + bookCover + ")";
 
       const bookPages = data.items[0].volumeInfo.pageCount;
@@ -103,10 +106,18 @@ form.addEventListener("submit", (e) => {
 
       console.log(bookTitle);
       console.log(bookAuthor);
-
-      console.log(bookPages);
       console.log(bookDescription);
+      console.log(bookPages);
     });
+
+  let autocomplete = () => {
+    titles.push(formValue.book.value);
+    authors.push(formValue.author.value);
+    console.log(titles);
+    console.log(authors);
+  };
+
+  autocomplete();
 
   cards.appendChild(newDiv);
   formValue.read.checked
