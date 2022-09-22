@@ -46,9 +46,6 @@ form.addEventListener("submit", (e) => {
   );
 
   myLibrary.push(nameOfTheBook.info());
-  console.log(myLibrary);
-
-  console.log(formValue.book.value);
 
   const newDiv = document.createElement("div");
   const buttonsDiv = document.createElement("div");
@@ -80,44 +77,28 @@ form.addEventListener("submit", (e) => {
   buttonsDiv.className = "buttonsDiv";
 
   let bookName = nameOfTheBook.title;
-  let authorName = nameOfTheBook.author;
 
-  fetch(
-    "https://www.googleapis.com/books/v1/volumes?q=" +
-      bookName +
-      "+inauthor:" +
-      authorName +
-      "&key=AIzaSyD5KjQTgCkvSbn5Pr-UIVtvuF4JV0dRkBQ"
-  )
+  fetch("http://openlibrary.org/search.json?q=" + bookName)
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
-      const bookTitle = data.items[0].volumeInfo.title;
-      const bookAuthor = data.items[0].volumeInfo.authors[0];
-      const bookCover = data.items[0].volumeInfo.imageLinks.thumbnail;
-      newDiv.style.backgroundImage = "url(" + bookCover + ")";
 
-      const bookPages = data.items[0].volumeInfo.pageCount;
-      const bookDescription = data.items[0].volumeInfo.description;
+      const book = data.docs.find((book) =>
+        book.hasOwnProperty("cover_edition_key")
+      );
+
+      if (book) {
+        const bookCover = book.cover_edition_key;
+        newDiv.style.backgroundImage =
+          "url('https://covers.openlibrary.org/b/olid/" +
+          bookCover +
+          "-M.jpg')";
+      }
 
       infoButton.addEventListener("click", () => {
-        alert(bookDescription);
+        alert(nameOfTheBook.info());
       });
-
-      console.log(bookTitle);
-      console.log(bookAuthor);
-      console.log(bookDescription);
-      console.log(bookPages);
     });
-
-  let autocomplete = () => {
-    titles.push(formValue.book.value);
-    authors.push(formValue.author.value);
-    console.log(titles);
-    console.log(authors);
-  };
-
-  autocomplete();
 
   cards.appendChild(newDiv);
   formValue.read.checked
