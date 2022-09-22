@@ -5,6 +5,7 @@ const form = document.querySelector(".form");
 const addbook = document.querySelector(".addbook");
 const closeForm = document.querySelector(".closeForm");
 const cards = document.querySelector(".cards");
+const input = document.querySelector("#book");
 
 form.style.display = "none";
 closeForm.style.display = "none";
@@ -38,14 +39,14 @@ form.addEventListener("submit", (e) => {
   e.preventDefault();
   let formValue = e.target;
 
-  let nameOfTheBook = new Book(
+  let book = new Book(
     formValue.book.value,
     formValue.author.value,
     formValue.pages.value,
     formValue.read.checked
   );
 
-  myLibrary.push(nameOfTheBook.info());
+  myLibrary.push(book.info());
 
   const newDiv = document.createElement("div");
   const buttonsDiv = document.createElement("div");
@@ -76,29 +77,11 @@ form.addEventListener("submit", (e) => {
   infoButton.className = "buttons";
   buttonsDiv.className = "buttonsDiv";
 
-  let bookName = nameOfTheBook.title;
+  getCover(book, newDiv);
 
-  fetch("http://openlibrary.org/search.json?q=" + bookName)
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-
-      const book = data.docs.find((book) =>
-        book.hasOwnProperty("cover_edition_key")
-      );
-
-      if (book) {
-        const bookCover = book.cover_edition_key;
-        newDiv.style.backgroundImage =
-          "url('https://covers.openlibrary.org/b/olid/" +
-          bookCover +
-          "-M.jpg')";
-      }
-
-      infoButton.addEventListener("click", () => {
-        alert(nameOfTheBook.info());
-      });
-    });
+  infoButton.addEventListener("click", () => {
+    alert(nameOfTheBook.info());
+  });
 
   cards.appendChild(newDiv);
   formValue.read.checked
@@ -121,11 +104,52 @@ form.addEventListener("submit", (e) => {
 
   form.style.display = "none";
   closeForm.style.display = "none";
-  (formValue.book.value = ""),
-    (formValue.author.value = ""),
-    (formValue.pages.value = ""),
-    (formValue.read.checked = false);
+  // (formValue.book.value = ""),
+  //   (formValue.author.value = ""),
+  //   (formValue.pages.value = ""),
+  //   (formValue.read.checked = false);
 });
 
-// kad krenes pisat dobiješ prijedloge iz knjiznice - API
-// Napravit arhivu - korisnik se logira i može unutar svojeg usernamea spremat liste
+let getCover = (book, newDiv) => {
+  let bookName = book.title;
+  fetch("http://openlibrary.org/search.json?q=" + bookName)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+
+      const book = data.docs.find((book) =>
+        book.hasOwnProperty("cover_edition_key")
+      );
+
+      if (book) {
+        const bookCover = book.cover_edition_key;
+        newDiv.style.backgroundImage =
+          "url('https://covers.openlibrary.org/b/olid/" +
+          bookCover +
+          "-M.jpg')";
+      }
+    });
+};
+
+const debounce = (callback, wait) => {
+  let timeoutId = null;
+  return (...args) => {
+    window.clearTimeout(timeoutId);
+    timeoutId = window.setTimeout(() => {
+      callback.apply(null, args);
+    }, wait);
+  };
+};
+
+const getAutocomplete = debounce(() => {
+  fetch(`http://openlibrary.org/search.json?title=${input.value}&limit=5`)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      const titles = data.docs;
+      console.log(titles);
+      titles.forEach((array) => console.log(array.title));
+    });
+}, 1000);
+
+input.addEventListener("keyup", getAutocomplete);
