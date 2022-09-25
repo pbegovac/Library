@@ -57,6 +57,7 @@ body {
 .submit {
   display: flex;
   margin-bottom: 5px;
+  position: relative;
 }
 
 .submit {
@@ -212,4 +213,21 @@ label.box {
     clip-path: polygon(0% 0%, 100% 0%, 97% 100%, 3% 100%);
     z-index: -1;
   }
+}
+
+.autocomplete {
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  background-color: #f2f2f2;
+  width: fit-content;
+  margin-left: 7.5px;
+  white-space: pre;
+  position: absolute;
+  z-index: 1;
+  font-size: 14px;
+}
+
+.pElements {
+  background-color: red;
 }

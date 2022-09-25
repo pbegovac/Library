@@ -6,7 +6,9 @@ const addbook = document.querySelector(".addbook");
 const closeForm = document.querySelector(".closeForm");
 const cards = document.querySelector(".cards");
 const input = document.querySelector("#book");
+const autocomplete = document.querySelector(".autocomplete");
 
+autocomplete.style.display = "none";
 form.style.display = "none";
 closeForm.style.display = "none";
 
@@ -15,10 +17,10 @@ addbook.addEventListener("click", () => {
   closeForm.style.display = "block";
 });
 
-//needs fixing - acts like submit button - check event targeter
 closeForm.addEventListener("click", () => {
   form.style.display = "none";
   closeForm.style.display = "none";
+  autocomplete.style.display = "none";
   book.value = "";
   author.value = "";
   pages.value = "";
@@ -104,10 +106,15 @@ form.addEventListener("submit", (e) => {
 
   form.style.display = "none";
   closeForm.style.display = "none";
-  // (formValue.book.value = ""),
-  //   (formValue.author.value = ""),
-  //   (formValue.pages.value = ""),
-  //   (formValue.read.checked = false);
+  (formValue.book.value = ""),
+    (formValue.author.value = ""),
+    (formValue.pages.value = ""),
+    (formValue.read.checked = false);
+
+  bookTitles = [];
+
+  autocomplete.style.display = "none";
+  autocomplete.innerHTML = "";
 });
 
 let getCover = (book, newDiv) => {
@@ -120,6 +127,8 @@ let getCover = (book, newDiv) => {
       const book = data.docs.find((book) =>
         book.hasOwnProperty("cover_edition_key")
       );
+
+      console.log(book.author_alternative_name[0]);
 
       if (book) {
         const bookCover = book.cover_edition_key;
@@ -141,15 +150,43 @@ const debounce = (callback, wait) => {
   };
 };
 
+input.addEventListener("click", () => {
+  autocomplete.style.display = "block";
+});
+
 const getAutocomplete = debounce(() => {
+  const nameInput = document.querySelector(".nameInput");
+  nameInput.appendChild(autocomplete);
+
   fetch(`http://openlibrary.org/search.json?title=${input.value}&limit=5`)
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
       const titles = data.docs;
-      console.log(titles);
-      titles.forEach((array) => console.log(array.title));
+      const author = data.docs[0].author_alternative_name[0];
+
+      let bookTitles = [];
+      titles.forEach((array) => bookTitles.push(array.title));
+      bookTitles.unshift("");
+      autocomplete.innerHTML = bookTitles.join('<p class="elements">');
+      const pElements = document.querySelectorAll(".elements");
+      pElements.forEach((p) =>
+        p.addEventListener("click", () => {
+          const innerText = p.innerHTML;
+          console.log(innerText);
+          book.value = innerText;
+          console.log(author); //onaj koji unutar svojeg naziva ima innerText = taj author
+
+          autocomplete.style.display = "none";
+        })
+      );
     });
-}, 1000);
+}, 1);
+
+console.log(autocomplete.innerHTML);
 
 input.addEventListener("keyup", getAutocomplete);
+// arrayLines.addEventListener("click", () => {});
+// autocomplete.addEventListener("mouseover", () => {
+//   bookTitles.style. = "red";
+// });

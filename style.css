@@ -73,6 +73,7 @@ body {
   display: -ms-flexbox;
   display: flex;
   margin-bottom: 5px;
+  position: relative;
 }
 
 .submit {
@@ -271,5 +272,31 @@ label.box {
   -webkit-clip-path: polygon(0% 0%, 100% 0%, 97% 100%, 3% 100%);
           clip-path: polygon(0% 0%, 100% 0%, 97% 100%, 3% 100%);
   z-index: -1;
+}
+
+.autocomplete {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  background-color: #f2f2f2;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  margin-left: 7.5px;
+  white-space: pre;
+  position: absolute;
+  z-index: 1;
+  font-size: 14px;
+}
+
+.autocomplete:hover {
+  cursor: pointer;
 }
 /*# sourceMappingURL=style.css.map */
