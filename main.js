@@ -5,8 +5,9 @@ const form = document.querySelector(".form");
 const addbook = document.querySelector(".addbook");
 const closeForm = document.querySelector(".closeForm");
 const cards = document.querySelector(".cards");
-const input = document.querySelector("#book");
+let input = document.querySelector("#book");
 const autocomplete = document.querySelector(".autocomplete");
+let authorInput = document.querySelector("#author");
 
 autocomplete.style.display = "none";
 form.style.display = "none";
@@ -21,10 +22,10 @@ closeForm.addEventListener("click", () => {
   form.style.display = "none";
   closeForm.style.display = "none";
   autocomplete.style.display = "none";
-  book.value = "";
-  author.value = "";
-  pages.value = "";
-  read.checked = false;
+  Book.value = "";
+  Book.author.value = "";
+  Book.pages.value = "";
+  Book.read.checked = false;
 });
 
 function Book(title, author, pages, read) {
@@ -82,7 +83,7 @@ form.addEventListener("submit", (e) => {
   getCover(book, newDiv);
 
   infoButton.addEventListener("click", () => {
-    alert(nameOfTheBook.info());
+    alert(book.info());
   });
 
   cards.appendChild(newDiv);
@@ -158,12 +159,12 @@ const getAutocomplete = debounce(() => {
   const nameInput = document.querySelector(".nameInput");
   nameInput.appendChild(autocomplete);
 
-  fetch(`http://openlibrary.org/search.json?title=${input.value}&limit=5`)
+  fetch(`http://openlibrary.org/search.json?title=${input.value}&limit=10`)
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
       const titles = data.docs;
-      const author = data.docs[0].author_alternative_name[0];
+      console.log(titles);
 
       let bookTitles = [];
       titles.forEach((array) => bookTitles.push(array.title));
@@ -173,15 +174,23 @@ const getAutocomplete = debounce(() => {
       pElements.forEach((p) =>
         p.addEventListener("click", () => {
           const innerText = p.innerHTML;
-          console.log(innerText);
-          book.value = innerText;
-          console.log(author); //onaj koji unutar svojeg naziva ima innerText = taj author
+          input.value = innerText;
+
+          const author = data.docs.find((array) =>
+            array.title.includes(innerText)
+          );
+
+          console.log(author);
+
+          author.hasOwnProperty("author_alternative_name")
+            ? (authorInput.value = author.author_alternative_name[0])
+            : (authorInput.value = "");
 
           autocomplete.style.display = "none";
         })
       );
     });
-}, 1);
+}, 200);
 
 console.log(autocomplete.innerHTML);
 
