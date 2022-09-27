@@ -6,4 +6,4 @@
 
 #Using OpenLibrary Search API to make autocomplete on user input
 
-
+Live demo - https://pbegovac.github.io/Library/
