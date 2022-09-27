@@ -117,9 +117,7 @@ let getCover = (book, newDiv) => {
   let pText = document.createTextNode(book.info());
   pInfo.appendChild(pText);
   pInfo.style.color = "#f3f3f3";
-  pInfo.style.display = "flex";
-  pInfo.style.justifyContent = "center";
-  pInfo.style.alignItems = "center";
+  pInfo.style.margin = "15px";
   fetch("https://openlibrary.org/search.json?q=" + bookName)
     .then((response) => response.json())
     .then((data) => {
