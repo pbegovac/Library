@@ -5,9 +5,11 @@ const form = document.querySelector(".form");
 const addbook = document.querySelector(".addbook");
 const closeForm = document.querySelector(".closeForm");
 const cards = document.querySelector(".cards");
-let input = document.querySelector("#book");
 const autocomplete = document.querySelector(".autocomplete");
+let input = document.querySelector("#book");
 let authorInput = document.querySelector("#author");
+let pages = document.querySelector("#pages");
+let read = document.querySelector("#read");
 
 autocomplete.style.display = "none";
 form.style.display = "none";
@@ -16,16 +18,20 @@ closeForm.style.display = "none";
 addbook.addEventListener("click", () => {
   form.style.display = "block";
   closeForm.style.display = "block";
+  (input.value = ""),
+    (authorInput.value = ""),
+    (pages.value = ""),
+    (read.checked = false);
 });
 
 closeForm.addEventListener("click", () => {
   form.style.display = "none";
   closeForm.style.display = "none";
   autocomplete.style.display = "none";
-  Book.value = "";
-  Book.author.value = "";
-  Book.pages.value = "";
-  Book.read.checked = false;
+  input.value = "";
+  authorInput.value = "";
+  pages.value = "";
+  read.checked = false;
 });
 
 function Book(title, author, pages, read) {
@@ -34,7 +40,8 @@ function Book(title, author, pages, read) {
   this.pages = pages;
   this.read = read;
   this.info = function () {
-    return `${title} by ${author}, ${pages} pages`;
+    return `${title}
+     ${author}`;
   };
 }
 
@@ -67,17 +74,12 @@ form.addEventListener("submit", (e) => {
   const readButton = document.createElement("button");
   const buttonText = document.createTextNode("Read");
   const buttonNotRead = document.createTextNode("Not read");
-  const infoButton = document.createElement("button");
-  const infoText = document.createTextNode("Info");
 
   buttonsDiv.appendChild(readButton);
-  infoButton.appendChild(infoText);
-  buttonsDiv.appendChild(infoButton);
 
   newDiv.className = "newDiv";
   newButton.className = "buttons";
   readButton.className = "buttons";
-  infoButton.className = "buttons";
   buttonsDiv.className = "buttonsDiv";
 
   getCover(book, newDiv);
@@ -103,10 +105,6 @@ form.addEventListener("submit", (e) => {
 
   form.style.display = "none";
   closeForm.style.display = "none";
-  (formValue.book.value = ""),
-    (formValue.author.value = ""),
-    (formValue.pages.value = ""),
-    (formValue.read.checked = false);
 
   bookTitles = [];
 
@@ -126,32 +124,18 @@ let getCover = (book, newDiv) => {
       );
 
       if (book) {
-        const bookCover = book.cover_edition_key;
+        let bookCover = book.cover_edition_key;
         newDiv.style.backgroundImage =
           "url('https://covers.openlibrary.org/b/olid/" +
           bookCover +
           "-M.jpg')";
       } else {
-        newDiv.style.backgroundImage = "url(defaullt_book_cover.jpg)";
+        newDiv.style.backgroundImage = "url('default_book_cover.jpg')";
       }
     });
 };
 
-const debounce = (callback, wait) => {
-  let timeoutId = null;
-  return (...args) => {
-    window.clearTimeout(timeoutId);
-    timeoutId = window.setTimeout(() => {
-      callback.apply(null, args);
-    }, wait);
-  };
-};
-
-input.addEventListener("click", () => {
-  autocomplete.style.display = "block";
-});
-
-const getAutocomplete = debounce(() => {
+const getAutocomplete = () => {
   const nameInput = document.querySelector(".nameInput");
   nameInput.appendChild(autocomplete);
 
@@ -186,12 +170,9 @@ const getAutocomplete = debounce(() => {
         })
       );
     });
-}, 1);
-
-console.log(autocomplete.innerHTML);
+};
 
 input.addEventListener("keyup", getAutocomplete);
-// arrayLines.addEventListener("click", () => {});
-// autocomplete.addEventListener("mouseover", () => {
-//   bookTitles.style. = "red";
-// });
+input.addEventListener("click", () => {
+  autocomplete.style.display = "block";
+});

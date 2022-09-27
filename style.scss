@@ -146,7 +146,7 @@ label.box {
   min-width: 40px;
   height: 40vh;
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: 100% 100%;
   background-position: center;
   display: flex;
   flex-direction: column-reverse;
@@ -234,7 +234,6 @@ label.box {
   border-left: 2px solid #efede5;
   border-top: 1px solid #efede5;
   border-bottom: 1px solid #efede5;
-
   cursor: pointer;
 }
 
@@ -243,4 +242,27 @@ label.box {
   transform: scale(1.05);
   color: #efede5;
   font-size: 15px;
+}
+
+.readDiv {
+  width: 30%;
+  height: 50%;
+
+  position: absolute;
+  display: flex;
+  cursor: pointer;
+}
+
+.readOne {
+  width: 50%;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+.readTwo {
+  background-image: url("./paper.jpg");
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
