@@ -40,8 +40,7 @@ function Book(title, author, pages, read) {
   this.pages = pages;
   this.read = read;
   this.info = function () {
-    return `${title}
-     ${author}`;
+    return title + "\r\n" + author;
   };
 }
 
@@ -114,6 +113,13 @@ form.addEventListener("submit", (e) => {
 
 let getCover = (book, newDiv) => {
   let bookName = book.title;
+  let pInfo = document.createElement("p");
+  let pText = document.createTextNode(book.info());
+  pInfo.appendChild(pText);
+  pInfo.style.color = "#f3f3f3";
+  pInfo.style.display = "flex";
+  pInfo.style.justifyContent = "center";
+  pInfo.style.alignItems = "center";
   fetch("https://openlibrary.org/search.json?q=" + bookName)
     .then((response) => response.json())
     .then((data) => {
@@ -131,6 +137,7 @@ let getCover = (book, newDiv) => {
           "-M.jpg')";
       } else {
         newDiv.style.backgroundImage = "url('default_book_cover.jpg')";
+        newDiv.appendChild(pInfo);
       }
     });
 };
