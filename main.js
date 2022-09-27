@@ -82,9 +82,13 @@ form.addEventListener("submit", (e) => {
 
   getCover(book, newDiv);
 
-  infoButton.addEventListener("click", () => {
-    alert(book.info());
-  });
+  // infoButton.addEventListener("click", () => {
+  //   newDiv.style.background = "black";
+  //   infoButton.addEventListener("click", () => {
+  //     newDiv.style.backgroundImage =
+  //       "url('https://covers.openlibrary.org/b/olid/" + bookCover + "-M.jpg')";
+  //   });
+  // });
 
   cards.appendChild(newDiv);
   formValue.read.checked
@@ -129,14 +133,14 @@ let getCover = (book, newDiv) => {
         book.hasOwnProperty("cover_edition_key")
       );
 
-      console.log(book.author_alternative_name[0]);
-
       if (book) {
         const bookCover = book.cover_edition_key;
         newDiv.style.backgroundImage =
           "url('https://covers.openlibrary.org/b/olid/" +
           bookCover +
           "-M.jpg')";
+      } else {
+        newDiv.style.backgroundImage = "url(defaullt_book_cover.jpg)";
       }
     });
 };
@@ -180,17 +184,17 @@ const getAutocomplete = debounce(() => {
             array.title.includes(innerText)
           );
 
-          console.log(author);
-
-          author.hasOwnProperty("author_alternative_name")
-            ? (authorInput.value = author.author_alternative_name[0])
-            : (authorInput.value = "");
+          author.hasOwnProperty("author_name")
+            ? (authorInput.value = author.author_name[0])
+            : author.hasOwnProperty("author_alternative_name")(
+                (authorInput.value = author.author_alternative_name[0])
+              );
 
           autocomplete.style.display = "none";
         })
       );
     });
-}, 200);
+}, 1);
 
 console.log(autocomplete.innerHTML);
 

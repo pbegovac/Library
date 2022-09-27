@@ -27,6 +27,7 @@
   margin-right: 20px;
   background-color: #8288ae;
   border-radius: 2px;
+  color: #efede5;
 }
 
 .addbook:hover,
@@ -204,6 +205,12 @@ label.box {
   border: 2px outset #c7c6c6;
 }
 
+.newDiv:hover {
+  -webkit-transform: translate(0, -10px) skew(-3deg, 3deg) scale(1.1);
+          transform: translate(0, -10px) skew(-3deg, 3deg) scale(1.1);
+  cursor: pointer;
+}
+
 .buttonsDiv {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -218,12 +225,6 @@ label.box {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-}
-
-.newDiv:hover {
-  -webkit-transform: translate(0, -10px) skew(-3deg, 3deg) scale(1.1);
-          transform: translate(0, -10px) skew(-3deg, 3deg) scale(1.1);
-  cursor: pointer;
 }
 
 .bookshelf {
@@ -285,7 +286,6 @@ label.box {
   height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
-  background-color: #f2f2f2;
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
@@ -296,7 +296,20 @@ label.box {
   font-size: 14px;
 }
 
-.autocomplete:hover {
+.elements {
+  background-color: #f2f2f2;
+  border-right: 2px solid #efede5;
+  border-left: 2px solid #efede5;
+  border-top: 1px solid #efede5;
+  border-bottom: 1px solid #efede5;
   cursor: pointer;
+}
+
+.elements:hover {
+  background-color: #8288ae;
+  -webkit-transform: scale(1.05);
+          transform: scale(1.05);
+  color: #efede5;
+  font-size: 15px;
 }
 /*# sourceMappingURL=style.css.map */

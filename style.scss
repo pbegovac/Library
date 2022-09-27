@@ -26,6 +26,7 @@
   margin-right: 20px;
   background-color: #8288ae;
   border-radius: 2px;
+  color: #efede5;
 }
 
 .addbook:hover,
@@ -156,16 +157,16 @@ label.box {
   border: 2px outset rgb(199, 198, 198);
 }
 
+.newDiv:hover {
+  transform: translate(0, -10px) skew(-3deg, 3deg) scale(1.1);
+  cursor: pointer;
+}
+
 .buttonsDiv {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-}
-
-.newDiv:hover {
-  transform: translate(0, -10px) skew(-3deg, 3deg) scale(1.1);
-  cursor: pointer;
 }
 
 //bookshelf code - https://codepen.io/ekfuhrmann/pen/OJmRVPj
@@ -219,7 +220,6 @@ label.box {
   display: flex;
   flex-direction: column;
   height: fit-content;
-  background-color: #f2f2f2;
   width: fit-content;
   margin-left: 7.5px;
   white-space: pre;
@@ -228,6 +228,19 @@ label.box {
   font-size: 14px;
 }
 
-.pElements {
-  background-color: red;
+.elements {
+  background-color: #f2f2f2;
+  border-right: 2px solid #efede5;
+  border-left: 2px solid #efede5;
+  border-top: 1px solid #efede5;
+  border-bottom: 1px solid #efede5;
+
+  cursor: pointer;
+}
+
+.elements:hover {
+  background-color: #8288ae;
+  transform: scale(1.05);
+  color: #efede5;
+  font-size: 15px;
 }
