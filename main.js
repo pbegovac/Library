@@ -140,7 +140,21 @@ let getCover = (book, newDiv) => {
     });
 };
 
-const getAutocomplete = () => {
+const debounce = (callback, wait) => {
+  let timeoutId = null;
+  return (...args) => {
+    window.clearTimeout(timeoutId);
+    timeoutId = window.setTimeout(() => {
+      callback.apply(null, args);
+    }, wait);
+  };
+};
+
+input.addEventListener("click", () => {
+  autocomplete.style.display = "block";
+});
+
+const getAutocomplete = debounce(() => {
   const nameInput = document.querySelector(".nameInput");
   nameInput.appendChild(autocomplete);
 
@@ -175,7 +189,7 @@ const getAutocomplete = () => {
         })
       );
     });
-};
+}, 200);
 
 input.addEventListener("keyup", getAutocomplete);
 input.addEventListener("click", () => {
