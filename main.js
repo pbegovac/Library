@@ -82,14 +82,6 @@ form.addEventListener("submit", (e) => {
 
   getCover(book, newDiv);
 
-  // infoButton.addEventListener("click", () => {
-  //   newDiv.style.background = "black";
-  //   infoButton.addEventListener("click", () => {
-  //     newDiv.style.backgroundImage =
-  //       "url('https://covers.openlibrary.org/b/olid/" + bookCover + "-M.jpg')";
-  //   });
-  // });
-
   cards.appendChild(newDiv);
   formValue.read.checked
     ? readButton.appendChild(buttonText)
@@ -124,7 +116,7 @@ form.addEventListener("submit", (e) => {
 
 let getCover = (book, newDiv) => {
   let bookName = book.title;
-  fetch("http://openlibrary.org/search.json?q=" + bookName)
+  fetch("https://openlibrary.org/search.json?q=" + bookName)
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
@@ -163,7 +155,7 @@ const getAutocomplete = debounce(() => {
   const nameInput = document.querySelector(".nameInput");
   nameInput.appendChild(autocomplete);
 
-  fetch(`http://openlibrary.org/search.json?title=${input.value}&limit=10`)
+  fetch(`https://openlibrary.org/search.json?title=${input.value}&limit=10`)
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
