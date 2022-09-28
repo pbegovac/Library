@@ -118,6 +118,8 @@ let getCover = (book, newDiv) => {
   pInfo.appendChild(pText);
   pInfo.style.color = "#f3f3f3";
   pInfo.style.margin = "15px";
+  newDiv.appendChild(pInfo);
+  pInfo.style.display = "none";
   fetch("https://openlibrary.org/search.json?q=" + bookName)
     .then((response) => response.json())
     .then((data) => {
@@ -135,8 +137,29 @@ let getCover = (book, newDiv) => {
           "-M.jpg')";
       } else {
         newDiv.style.backgroundImage = "url('default_book_cover.jpg')";
-        newDiv.appendChild(pInfo);
+        pInfo.style.display = "block";
       }
+
+      let toggle = false;
+      let makeBackground = () => {
+        let bookCover = book.cover_edition_key;
+
+        if ((newDiv.style.backgroundImage = toggle)) {
+          newDiv.style.backgroundImage =
+            "url('https://covers.openlibrary.org/b/olid/" +
+            bookCover +
+            "-M.jpg')";
+          pInfo.style.display = "none";
+        } else {
+          newDiv.style.backgroundImage = "url('paper.jpg')";
+          pInfo.style.display = "block";
+          pInfo.style.color = "black";
+        }
+
+        toggle = !toggle;
+      };
+
+      newDiv.addEventListener("click", makeBackground, false);
     });
 };
 
@@ -149,10 +172,6 @@ const debounce = (callback, wait) => {
     }, wait);
   };
 };
-
-input.addEventListener("click", () => {
-  autocomplete.style.display = "block";
-});
 
 const getAutocomplete = debounce(() => {
   const nameInput = document.querySelector(".nameInput");

@@ -141,6 +141,15 @@ label.box {
   align-items: center;
 }
 
+.divHolder {
+  width: 16vw;
+  height: 40vh;
+  background: #45413f;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+}
+
 .newDiv {
   width: 12vw;
   min-width: 40px;
@@ -164,9 +173,9 @@ label.box {
 
 .buttonsDiv {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: flex-end;
 }
 
 //bookshelf code - https://codepen.io/ekfuhrmann/pen/OJmRVPj
@@ -242,27 +251,4 @@ label.box {
   transform: scale(1.05);
   color: #efede5;
   font-size: 15px;
-}
-
-.readDiv {
-  width: 30%;
-  height: 50%;
-
-  position: absolute;
-  display: flex;
-  cursor: pointer;
-}
-
-.readOne {
-  width: 50%;
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-}
-
-.readTwo {
-  background-image: url("./paper.jpg");
-  width: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
