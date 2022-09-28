@@ -116,7 +116,7 @@ let getCover = (book, newDiv) => {
   let pInfo = document.createElement("p");
   let pText = document.createTextNode(book.info());
   pInfo.appendChild(pText);
-  pInfo.style.margin = "15px";
+
   newDiv.appendChild(pInfo);
   pInfo.style.display = "none";
 
@@ -128,6 +128,7 @@ let getCover = (book, newDiv) => {
       const book = data.docs.find((book) =>
         book.hasOwnProperty("cover_edition_key")
       );
+      console.log(book);
 
       if (book) {
         let bookCover = book.cover_edition_key;
@@ -139,15 +140,13 @@ let getCover = (book, newDiv) => {
         newDiv.style.backgroundImage = "url('default_book_cover.jpg')";
       }
 
+      const firstSentence = data.docs.find((sentence) =>
+        sentence.hasOwnProperty("first_sentence")
+      );
+
       let toggle = false;
       let makeBackground = () => {
-        const firstSentence = data.docs.find((sentence) =>
-          sentence.hasOwnProperty("first_sentence")
-        );
-
         let sentenceP = document.createElement("p");
-        let sentence = document.createTextNode(firstSentence.first_sentence[0]);
-        sentenceP.appendChild(sentence);
         newDiv.appendChild(sentenceP);
         sentenceP.style.display = "none";
 
@@ -159,15 +158,22 @@ let getCover = (book, newDiv) => {
             "-M.jpg')";
           pInfo.style.display = "none";
           sentenceP.style.display = "none";
+          console.log(1);
         } else {
           newDiv.style.backgroundImage = "url('paper.jpg')";
-          if (firstSentence) {
+          if (book.hasOwnProperty("first_sentence")) {
             sentenceP.style.display = "block";
+            let sentence = document.createTextNode(
+              firstSentence.first_sentence[0]
+            );
+            sentenceP.appendChild(sentence);
             newDiv.addEventListener("click", () => {
               sentenceP.style.display = "none";
             });
+            console.log(2);
           } else {
             pInfo.style.display = "block";
+            console.log(3);
           }
         }
 
@@ -206,26 +212,28 @@ const getAutocomplete = debounce(() => {
       const pElements = document.querySelectorAll(".elements");
       pElements.forEach((p) =>
         p.addEventListener("click", () => {
+          // na klik izvuci taj array i popuni sa tablicama koje su u njemu, uključujući cover
           const innerText = p.innerHTML;
           input.value = innerText;
 
+          //trebao bih preko knjige traziti autora
           const author = data.docs.find((array) =>
             array.title.includes(innerText)
           );
 
-          author.hasOwnProperty("author_name")
-            ? (authorInput.value = author.author_name[0])
-            : author.hasOwnProperty("author_alternative_name")(
-                (authorInput.value = author.author_alternative_name[0])
-              );
+          author.hasOwnProperty("author_alternative_name")
+            ? (authorInput.value = author.author_alternative_name[0])
+            : (authorInput.value = author.author_name[0]);
+
+          console.log(data);
 
           autocomplete.style.display = "none";
         })
       );
     });
-}, 500);
+}, 200);
 
 input.addEventListener("keyup", getAutocomplete);
-input.addEventListener("click", () => {
+input.addEventListener("keyup", () => {
   autocomplete.style.display = "block";
 });
