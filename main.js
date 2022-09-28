@@ -70,7 +70,7 @@ form.addEventListener("submit", (e) => {
   newButton.appendChild(text);
   document.body.insertBefore(newDiv, before);
 
-  const readButton = document.createElement("button");
+  let readButton = document.createElement("button");
   const buttonText = document.createTextNode("Read");
   const buttonNotRead = document.createTextNode("Not read");
 
@@ -116,10 +116,10 @@ let getCover = (book, newDiv) => {
   let pInfo = document.createElement("p");
   let pText = document.createTextNode(book.info());
   pInfo.appendChild(pText);
-  pInfo.style.color = "#f3f3f3";
   pInfo.style.margin = "15px";
   newDiv.appendChild(pInfo);
   pInfo.style.display = "none";
+
   fetch("https://openlibrary.org/search.json?q=" + bookName)
     .then((response) => response.json())
     .then((data) => {
@@ -137,23 +137,38 @@ let getCover = (book, newDiv) => {
           "-M.jpg')";
       } else {
         newDiv.style.backgroundImage = "url('default_book_cover.jpg')";
-        pInfo.style.display = "block";
       }
 
       let toggle = false;
       let makeBackground = () => {
-        let bookCover = book.cover_edition_key;
+        const firstSentence = data.docs.find((sentence) =>
+          sentence.hasOwnProperty("first_sentence")
+        );
+
+        let sentenceP = document.createElement("p");
+        let sentence = document.createTextNode(firstSentence.first_sentence[0]);
+        sentenceP.appendChild(sentence);
+        newDiv.appendChild(sentenceP);
+        sentenceP.style.display = "none";
 
         if ((newDiv.style.backgroundImage = toggle)) {
+          let bookCover = book.cover_edition_key;
           newDiv.style.backgroundImage =
             "url('https://covers.openlibrary.org/b/olid/" +
             bookCover +
             "-M.jpg')";
           pInfo.style.display = "none";
+          sentenceP.style.display = "none";
         } else {
           newDiv.style.backgroundImage = "url('paper.jpg')";
-          pInfo.style.display = "block";
-          pInfo.style.color = "black";
+          if (firstSentence) {
+            sentenceP.style.display = "block";
+            newDiv.addEventListener("click", () => {
+              sentenceP.style.display = "none";
+            });
+          } else {
+            pInfo.style.display = "block";
+          }
         }
 
         toggle = !toggle;
@@ -208,7 +223,7 @@ const getAutocomplete = debounce(() => {
         })
       );
     });
-}, 200);
+}, 500);
 
 input.addEventListener("keyup", getAutocomplete);
 input.addEventListener("click", () => {
