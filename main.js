@@ -40,7 +40,7 @@ function Book(title, author, pages, read) {
   this.pages = pages;
   this.read = read;
   this.info = function () {
-    return title + "\r\n" + author;
+    return "TITLE " + title + " AUTHOR " + author;
   };
 }
 
@@ -88,7 +88,8 @@ form.addEventListener("submit", (e) => {
     ? readButton.appendChild(buttonText)
     : readButton.appendChild(buttonNotRead);
 
-  newButton.addEventListener("click", () => {
+  newButton.addEventListener("click", (e) => {
+    e.stopPropagation();
     newDiv.remove();
   });
 
@@ -113,6 +114,8 @@ form.addEventListener("submit", (e) => {
 
 let getCover = (book, newDiv) => {
   let bookName = book.title;
+  console.log(book);
+  console.log(book.title);
   let pInfo = document.createElement("p");
   let pText = document.createTextNode(book.info());
 
@@ -120,6 +123,9 @@ let getCover = (book, newDiv) => {
   pInfo.style.fontFamily = "Caveat";
   newDiv.appendChild(pInfo);
   pInfo.style.display = "none";
+
+  console.log(pInfo);
+  console.log(pText);
 
   fetch("https://openlibrary.org/search.json?q=" + bookName)
     .then((response) => response.json())
@@ -133,6 +139,7 @@ let getCover = (book, newDiv) => {
 
       if (book) {
         let bookCover = book.cover_edition_key;
+        console.log(bookCover);
         newDiv.style.backgroundImage =
           "url('https://covers.openlibrary.org/b/olid/" +
           bookCover +
@@ -146,7 +153,7 @@ let getCover = (book, newDiv) => {
       );
 
       let toggle = false;
-      let makeBackground = () => {
+      let toggleBackground = () => {
         let sentenceP = document.createElement("p");
         newDiv.appendChild(sentenceP);
         sentenceP.style.display = "none";
@@ -190,7 +197,7 @@ let getCover = (book, newDiv) => {
         }
       };
 
-      newDiv.addEventListener("click", makeBackground, false);
+      newDiv.addEventListener("click", toggleBackground, false);
     });
 };
 
@@ -204,63 +211,75 @@ const debounce = (callback, wait) => {
   };
 };
 
-const getAutocomplete = debounce(() => {
+const getAutocomplete = () => {
   const nameInput = document.querySelector(".nameInput");
   nameInput.appendChild(autocomplete);
 
   fetch(`https://openlibrary.org/search.json?title=${input.value}&limit=10`)
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
       const titles = data.docs;
+
+      console.log(data.docs);
       console.log(titles);
-      console.log(input.value);
 
       let bookTitles = [];
       titles.forEach((array) => bookTitles.push(array.title));
       bookTitles.unshift("");
+      console.log(bookTitles);
       autocomplete.innerHTML = bookTitles.join('<p class="elements">');
       const pElements = document.querySelectorAll(".elements");
+
       pElements.forEach((p) =>
         p.addEventListener("click", () => {
           const innerText = p.innerHTML;
-          console.log(innerText);
+          input.value = innerText;
 
-          const book = data.docs.find((book) =>
-            book.hasOwnProperty("cover_edition_key")
+          //ako je cover_edition_key.title = author_alternative.name.title ili ako je cover_edition_key.title = author_name ili ""
+          const cover = data.docs.find((photo) =>
+            photo.hasOwnProperty("cover_edition_key")
+          );
+          console.log(cover);
+          const book = data.docs.find(
+            (book) => (book.title_suggest = input.value)
           );
 
-          const author = data.docs.find((array) =>
-            array.hasOwnProperty("author_alternative_name")
-          );
+          console.log(book);
 
-          const authorName = data.docs.find((author) =>
-            author.hasOwnProperty("author_name")
-          );
+          const bookAuthorName = book.hasOwnProperty("author_alternative_name");
+          const bookAuthorAltName = book.hasOwnProperty("author_name");
 
-          if (book && author) {
-            input.value = innerText;
-            authorInput.value = author.author_alternative_name[0];
-            console.log(input.value);
-            console.log(innerText);
-          } else if (book && authorName) {
-            authorInput.value = author.author_name[0];
+          console.log(bookAuthorName);
+          console.log(bookAuthorAltName);
+
+          console.log(book.title_suggest);
+
+          if (book && bookAuthorAltName) {
+            authorInput.value = book.author_name[0];
+            console.log(1);
+            console.log(data.docs[0].cover_edition_key);
+          } else if (book && bookAuthorName) {
+            authorInput.value = book.author_alternative_name[0];
+            console.log(2);
           } else {
             authorInput.value = "";
+            console.log(3);
           }
 
           autocomplete.style.display = "none";
         })
       );
     });
-}, 200);
+};
 
 input.addEventListener("keyup", getAutocomplete);
 input.addEventListener("keyup", () => {
   autocomplete.style.display = "block";
 });
 
-//button focus
+//button.appendChild toggle problem
 //keybord arrow down to go down and arrow up to go up
 //start at input
 //resolve US Steel book problem
+//if knows author => fill input.value
+//sd problem
