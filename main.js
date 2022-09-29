@@ -115,7 +115,9 @@ let getCover = (book, newDiv) => {
   let bookName = book.title;
   let pInfo = document.createElement("p");
   let pText = document.createTextNode(book.info());
+
   pInfo.appendChild(pText);
+  pInfo.style.fontFamily = "Caveat";
 
   newDiv.appendChild(pInfo);
   pInfo.style.display = "none";
@@ -150,34 +152,46 @@ let getCover = (book, newDiv) => {
         newDiv.appendChild(sentenceP);
         sentenceP.style.display = "none";
 
-        if ((newDiv.style.backgroundImage = toggle)) {
-          let bookCover = book.cover_edition_key;
-          newDiv.style.backgroundImage =
-            "url('https://covers.openlibrary.org/b/olid/" +
-            bookCover +
-            "-M.jpg')";
-          pInfo.style.display = "none";
-          sentenceP.style.display = "none";
-          console.log(1);
-        } else {
-          newDiv.style.backgroundImage = "url('paper.jpg')";
-          if (book.hasOwnProperty("first_sentence")) {
-            sentenceP.style.display = "block";
-            let sentence = document.createTextNode(
-              firstSentence.first_sentence[0]
-            );
-            sentenceP.appendChild(sentence);
-            newDiv.addEventListener("click", () => {
-              sentenceP.style.display = "none";
-            });
-            console.log(2);
+        if (book) {
+          if ((newDiv.style.backgroundImage = toggle)) {
+            let bookCover = book.cover_edition_key;
+            newDiv.style.backgroundImage =
+              "url('https://covers.openlibrary.org/b/olid/" +
+              bookCover +
+              "-M.jpg')";
+            pInfo.style.display = "none";
+            sentenceP.style.display = "none";
+            console.log(1);
           } else {
-            pInfo.style.display = "block";
-            console.log(3);
+            newDiv.style.backgroundImage = "url('paper.jpg')";
+            if (book.hasOwnProperty("first_sentence")) {
+              sentenceP.style.display = "block";
+              let sentence = document.createTextNode(
+                firstSentence.first_sentence[0]
+              );
+              sentenceP.appendChild(sentence);
+              newDiv.addEventListener("click", () => {
+                sentenceP.style.display = "none";
+              });
+              console.log(2);
+            } else {
+              pInfo.style.display = "block";
+              console.log(3);
+            }
           }
-        }
 
-        toggle = !toggle;
+          toggle = !toggle;
+        } else {
+          if ((newDiv.style.backgroundImage = toggle)) {
+            newDiv.style.backgroundImage = "url('default_book_cover.jpg')";
+            pInfo.style.display = "none";
+            sentenceP.style.display = "none";
+          } else {
+            newDiv.style.backgroundImage = "url('paper.jpg')";
+            pInfo.style.display = "block";
+          }
+          toggle = !toggle;
+        }
       };
 
       newDiv.addEventListener("click", makeBackground, false);
@@ -197,6 +211,7 @@ const debounce = (callback, wait) => {
 const getAutocomplete = debounce(() => {
   const nameInput = document.querySelector(".nameInput");
   nameInput.appendChild(autocomplete);
+  console.log(input.value);
 
   fetch(`https://openlibrary.org/search.json?title=${input.value}&limit=10`)
     .then((response) => response.json())
@@ -204,6 +219,7 @@ const getAutocomplete = debounce(() => {
       console.log(data);
       const titles = data.docs;
       console.log(titles);
+      console.log(input.value);
 
       let bookTitles = [];
       titles.forEach((array) => bookTitles.push(array.title));
@@ -212,20 +228,31 @@ const getAutocomplete = debounce(() => {
       const pElements = document.querySelectorAll(".elements");
       pElements.forEach((p) =>
         p.addEventListener("click", () => {
-          // na klik izvuci taj array i popuni sa tablicama koje su u njemu, uključujući cover
           const innerText = p.innerHTML;
-          input.value = innerText;
+          console.log(innerText);
 
-          //trebao bih preko knjige traziti autora
-          const author = data.docs.find((array) =>
-            array.title.includes(innerText)
+          const book = data.docs.find((book) =>
+            book.hasOwnProperty("cover_edition_key")
           );
 
-          author.hasOwnProperty("author_alternative_name")
-            ? (authorInput.value = author.author_alternative_name[0])
-            : (authorInput.value = author.author_name[0]);
+          const author = data.docs.find((array) =>
+            array.hasOwnProperty("author_alternative_name")
+          );
 
-          console.log(data);
+          const authorName = data.docs.find((author) =>
+            author.hasOwnProperty("author_name")
+          );
+
+          if (book && author) {
+            input.value = innerText;
+            authorInput.value = author.author_alternative_name[0];
+            console.log(input.value);
+            console.log(innerText);
+          } else if (book && authorName) {
+            authorInput.value = author.author_name[0];
+          } else {
+            authorInput.value = "";
+          }
 
           autocomplete.style.display = "none";
         })
