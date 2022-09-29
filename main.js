@@ -93,7 +93,9 @@ form.addEventListener("submit", (e) => {
   });
 
   //toggle error when read is first - readButton is not defined
-  readButton.addEventListener("click", () => {
+
+  readButton.addEventListener("click", (e) => {
+    e.stopPropagation();
     formValue.read.checked = formValue.read.checked !== true;
     formValue.read.checked
       ? readButton.appendChild(buttonText) &&
@@ -104,8 +106,6 @@ form.addEventListener("submit", (e) => {
 
   form.style.display = "none";
   closeForm.style.display = "none";
-
-  bookTitles = [];
 
   autocomplete.style.display = "none";
   autocomplete.innerHTML = "";
@@ -118,7 +118,6 @@ let getCover = (book, newDiv) => {
 
   pInfo.appendChild(pText);
   pInfo.style.fontFamily = "Caveat";
-
   newDiv.appendChild(pInfo);
   pInfo.style.display = "none";
 
@@ -161,7 +160,6 @@ let getCover = (book, newDiv) => {
               "-M.jpg')";
             pInfo.style.display = "none";
             sentenceP.style.display = "none";
-            console.log(1);
           } else {
             newDiv.style.backgroundImage = "url('paper.jpg')";
             if (book.hasOwnProperty("first_sentence")) {
@@ -173,10 +171,8 @@ let getCover = (book, newDiv) => {
               newDiv.addEventListener("click", () => {
                 sentenceP.style.display = "none";
               });
-              console.log(2);
             } else {
               pInfo.style.display = "block";
-              console.log(3);
             }
           }
 
@@ -211,7 +207,6 @@ const debounce = (callback, wait) => {
 const getAutocomplete = debounce(() => {
   const nameInput = document.querySelector(".nameInput");
   nameInput.appendChild(autocomplete);
-  console.log(input.value);
 
   fetch(`https://openlibrary.org/search.json?title=${input.value}&limit=10`)
     .then((response) => response.json())
@@ -264,3 +259,8 @@ input.addEventListener("keyup", getAutocomplete);
 input.addEventListener("keyup", () => {
   autocomplete.style.display = "block";
 });
+
+//button focus
+//keybord arrow down to go down and arrow up to go up
+//start at input
+//resolve US Steel book problem
