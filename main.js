@@ -181,23 +181,21 @@ let getCover = (book, newDiv) => {
   fetch("https://openlibrary.org/search.json?q=" + input.value)
     .then((response) => response.json())
     .then((data) => {
+      console.log(data);
+
       const authorName = data.docs.find(
         (authorName) => authorName.author_name[0] === authorInput.value
       );
 
-      console.log(authorName);
+      const cover = data.docs.find((cover) =>
+        cover.hasOwnProperty("cover_edition_key")
+      );
 
-      if (authorName.hasOwnProperty("cover_edition_key")) {
-        let bookCover = authorName.cover_edition_key;
+      if (authorName && cover) {
+        let bookCover = cover.cover_edition_key;
         newDiv.style.backgroundImage =
           "url('https://covers.openlibrary.org/b/olid/" +
           bookCover +
-          "-M.jpg')";
-      } else if (authorName.hasOwnProperty("edition_key")) {
-        let otherCover = authorName.edition_key[0];
-        newDiv.style.backgroundImage =
-          "url('https://covers.openlibrary.org/b/olid/" +
-          otherCover +
           "-M.jpg')";
       } else {
         newDiv.style.backgroundImage = "url('default_book_cover.jpg')";
@@ -213,11 +211,9 @@ let getCover = (book, newDiv) => {
         newDiv.appendChild(sentenceP);
         sentenceP.style.display = "none";
 
-        if (authorName) {
+        if (authorName && cover) {
           if ((newDiv.style.backgroundImage = toggle)) {
-            let bookCover = authorName.cover_edition_key;
-            let otherCover = authorName.edition_key[0];
-
+            let bookCover = cover.cover_edition_key;
             newDiv.style.backgroundImage =
               "url('https://covers.openlibrary.org/b/olid/" +
               bookCover +
@@ -239,7 +235,6 @@ let getCover = (book, newDiv) => {
               pInfo.style.display = "block";
             }
           }
-
           toggle = !toggle;
         } else {
           if ((newDiv.style.backgroundImage = toggle)) {
@@ -267,5 +262,4 @@ input.addEventListener("keyup", () => {
 //button.appendChild toggle problem
 //keybord arrow down to go down and arrow up to go up
 //start at input
-//resolve US Steel book problem
 //if knows author => fill input.value
