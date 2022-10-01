@@ -40,7 +40,7 @@ function Book(title, author, pages, read) {
   this.pages = pages;
   this.read = read;
   this.info = function () {
-    return "TITLE " + title + " AUTHOR " + author;
+    return title + " " + author;
   };
 }
 
