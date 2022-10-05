@@ -235,10 +235,10 @@ label.box {
   position: absolute;
   z-index: 1;
   font-size: 14px;
+  background-color: #f2f2f2;
 }
 
 .elements {
-  background-color: #f2f2f2;
   border-right: 2px solid #efede5;
   border-left: 2px solid #efede5;
   border-top: 1px solid #efede5;
@@ -247,6 +247,13 @@ label.box {
 }
 
 .elements:hover {
+  background-color: #8288ae;
+  transform: scale(1.05);
+  color: #efede5;
+  font-size: 15px;
+}
+
+.arrowElements {
   background-color: #8288ae;
   transform: scale(1.05);
   color: #efede5;

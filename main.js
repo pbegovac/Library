@@ -11,13 +11,13 @@ let authorInput = document.querySelector("#author");
 let pages = document.querySelector("#pages");
 let read = document.querySelector("#read");
 
-autocomplete.style.display = "none";
 form.style.display = "none";
 closeForm.style.display = "none";
 
 addbook.addEventListener("click", () => {
   form.style.display = "block";
   closeForm.style.display = "block";
+  input.focus();
   (input.value = ""),
     (authorInput.value = ""),
     (pages.value = ""),
@@ -40,7 +40,7 @@ function Book(title, author, pages, read) {
   this.pages = pages;
   this.read = read;
   this.info = function () {
-    return title + " " + author;
+    return title + " " + author + " " + "Pages: " + pages;
   };
 }
 
@@ -57,25 +57,23 @@ const debounce = (callback, wait) => {
 const getAutocomplete = debounce(() => {
   const nameInput = document.querySelector(".nameInput");
   nameInput.appendChild(autocomplete);
-  console.log(input.value);
 
-  fetch(`https://openlibrary.org/search.json?title=${input.value}&limit=20`)
+  fetch(`https://openlibrary.org/search.json?title=${input.value}&limit=10`)
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
       const titles = data.docs;
 
       let bookTitles = [];
       titles.forEach((array) => bookTitles.push(array.title));
       bookTitles.unshift("");
       autocomplete.innerHTML = bookTitles.join('<p class="elements">');
+
       const pElements = document.querySelectorAll(".elements");
 
       pElements.forEach((p) =>
         p.addEventListener("click", () => {
           const innerText = p.innerHTML;
           input.value = innerText;
-          console.log(input.value);
 
           const cover = data.docs.find((cover) =>
             cover.hasOwnProperty("cover_edition_key")
@@ -89,19 +87,46 @@ const getAutocomplete = debounce(() => {
 
           if (cover && bookTitle) {
             authorInput.value = bookTitle.author_name[0];
+            pages.value = bookTitle.number_of_pages_median;
           } else {
             authorInput.value = "";
+            pages.value = "";
           }
 
           autocomplete.style.display = "none";
         })
       );
+
+      let highlightArrows = () => {
+        input.addEventListener("keydown", (e) => {
+          if (input.value !== "" && e.key === "ArrowDown") {
+            let pArray = Array.from(pElements);
+            let firstElement = pArray[0];
+            input.value = firstElement.innerHTML;
+            firstElement.className = "arrowElements";
+
+            const bookTitle = data.docs.find(
+              (bookTitle) => bookTitle.title === firstElement.innerHTML
+            );
+
+            authorInput.value = bookTitle.author_name[0];
+
+            pages.value = bookTitle.number_of_pages_median;
+          }
+        });
+      };
+
+      highlightArrows();
     });
 }, 200);
 
 let clickForm = () => {
   form.addEventListener("submit", (e) => {
     e.preventDefault();
+    if (e.keyCode === 13) {
+      e.preventDefault();
+    }
+
     let formValue = e.target;
 
     let book = new Book(
@@ -204,6 +229,7 @@ let getCover = (book, newDiv) => {
       const firstSentence = data.docs.find((sentence) =>
         sentence.hasOwnProperty("first_sentence")
       );
+      console.log(this);
 
       let toggle = false;
       let toggleBackground = () => {
@@ -253,6 +279,11 @@ let getCover = (book, newDiv) => {
     });
 };
 
+document.addEventListener("click", (e) => {
+  if (!autocomplete.contains(e.target)) {
+    autocomplete.style.display = "none";
+  }
+});
 input.addEventListener("keyup", getAutocomplete);
 clickForm();
 input.addEventListener("keyup", () => {
@@ -261,5 +292,4 @@ input.addEventListener("keyup", () => {
 
 //button.appendChild toggle problem
 //keybord arrow down to go down and arrow up to go up
-//start at input
 //if knows author => fill input.value

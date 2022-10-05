@@ -182,6 +182,21 @@ label.box {
           align-items: center;
 }
 
+.divHolder {
+  width: 16vw;
+  height: 40vh;
+  background: #45413f;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
+}
+
 .newDiv {
   width: 12vw;
   min-width: 40px;
@@ -215,16 +230,16 @@ label.box {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: horizontal;
+  -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
+      -ms-flex-direction: column;
+          flex-direction: column;
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
 }
 
 .bookshelf {
@@ -294,10 +309,10 @@ label.box {
   position: absolute;
   z-index: 1;
   font-size: 14px;
+  background-color: #f2f2f2;
 }
 
 .elements {
-  background-color: #f2f2f2;
   border-right: 2px solid #efede5;
   border-left: 2px solid #efede5;
   border-top: 1px solid #efede5;
@@ -313,33 +328,11 @@ label.box {
   font-size: 15px;
 }
 
-.readDiv {
-  width: 30%;
-  height: 50%;
-  position: absolute;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  cursor: pointer;
-}
-
-.readOne {
-  width: 50%;
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-}
-
-.readTwo {
-  background-image: url("./paper.jpg");
-  width: 50%;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+.arrowElements {
+  background-color: #8288ae;
+  -webkit-transform: scale(1.05);
+          transform: scale(1.05);
+  color: #efede5;
+  font-size: 15px;
 }
 /*# sourceMappingURL=style.css.map */
