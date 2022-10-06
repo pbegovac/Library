@@ -98,21 +98,62 @@ const getAutocomplete = debounce(() => {
       );
 
       let highlightArrows = () => {
+        let pArray = Array.from(pElements);
+        pArray.forEach((p) => (p.tabIndex = 0));
+        console.log(pArray);
+        let iterator = pArray.values();
+        let currentElementArray = [];
+
         input.addEventListener("keydown", (e) => {
           if (input.value !== "" && e.key === "ArrowDown") {
-            let pArray = Array.from(pElements);
             let firstElement = pArray[0];
-            input.value = firstElement.innerHTML;
-            firstElement.className = "arrowElements";
+            firstElement.focus();
 
-            const bookTitle = data.docs.find(
-              (bookTitle) => bookTitle.title === firstElement.innerHTML
+            pArray.forEach((p) =>
+              p.addEventListener("keydown", (e) => {
+                if (e.key === "ArrowDown") {
+                  goDown();
+                } else if (e.key === "ArrowUp") {
+                  goUp();
+                }
+
+                if (e.key === "Enter") {
+                  const bookTitle = data.docs.find(
+                    (bookTitle) => bookTitle.title === input.value
+                  );
+                  authorInput.value = bookTitle.author_name[0];
+                  pages.value = bookTitle.number_of_pages_median;
+                  autocomplete.style.display = "none";
+                }
+              })
             );
-
-            authorInput.value = bookTitle.author_name[0];
-
-            pages.value = bookTitle.number_of_pages_median;
           }
+
+          let goDown = () => {
+            let currentElement = iterator.next().value;
+            currentElementArray.unshift(currentElement);
+
+            if (currentElement) {
+              let theElement = currentElementArray[0].innerHTML;
+              let firstElement = currentElementArray[0];
+              let secondElement = currentElementArray[1];
+
+              firstElement.className = "arrowElements";
+              secondElement.classList.remove("arrowElements");
+
+              input.value = theElement;
+            }
+
+            // if there is a previous element remove class from him
+          };
+          let goUp = () => {
+            console.log();
+
+            //focus current element
+            //if there is a previous element remove class from him
+            // give class to current element
+            // input.value = currentElement.HTML
+          };
         });
       };
 
@@ -123,9 +164,6 @@ const getAutocomplete = debounce(() => {
 let clickForm = () => {
   form.addEventListener("submit", (e) => {
     e.preventDefault();
-    if (e.keyCode === 13) {
-      e.preventDefault();
-    }
 
     let formValue = e.target;
 
@@ -208,6 +246,7 @@ let getCover = (book, newDiv) => {
     .then((data) => {
       console.log(data);
 
+      //some books  dont have this data.docs => TypeError: Cannot read properties of undefined (reading '0')
       const authorName = data.docs.find(
         (authorName) => authorName.author_name[0] === authorInput.value
       );
@@ -229,11 +268,11 @@ let getCover = (book, newDiv) => {
       const firstSentence = data.docs.find((sentence) =>
         sentence.hasOwnProperty("first_sentence")
       );
-      console.log(this);
 
       let toggle = false;
       let toggleBackground = () => {
         let sentenceP = document.createElement("p");
+        sentenceP.className = "fit";
         newDiv.appendChild(sentenceP);
         sentenceP.style.display = "none";
 
