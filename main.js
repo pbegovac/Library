@@ -100,14 +100,12 @@ const getAutocomplete = debounce(() => {
       let highlightArrows = () => {
         let pArray = Array.from(pElements);
         pArray.forEach((p) => (p.tabIndex = 0));
-        console.log(pArray);
-        let iterator = pArray.values();
-        let currentElementArray = [];
 
         input.addEventListener("keydown", (e) => {
           if (input.value !== "" && e.key === "ArrowDown") {
             let firstElement = pArray[0];
             firstElement.focus();
+            firstElement.className = "arrowElements";
 
             pArray.forEach((p) =>
               p.addEventListener("keydown", (e) => {
@@ -130,29 +128,27 @@ const getAutocomplete = debounce(() => {
           }
 
           let goDown = () => {
-            let currentElement = iterator.next().value;
-            currentElementArray.unshift(currentElement);
+            let startElement = document.activeElement;
+            let moveElement = pArray[pArray.indexOf(startElement) + 1];
 
-            if (currentElement) {
-              let theElement = currentElementArray[0].innerHTML;
-              let firstElement = currentElementArray[0];
-              let secondElement = currentElementArray[1];
-
-              firstElement.className = "arrowElements";
-              secondElement.classList.remove("arrowElements");
-
-              input.value = theElement;
+            if (moveElement) {
+              moveElement.className = "arrowElements";
+              startElement.classList.remove("arrowElements");
+              moveElement.focus();
+              input.value = moveElement.innerHTML;
             }
-
-            // if there is a previous element remove class from him
           };
-          let goUp = () => {
-            console.log();
 
-            //focus current element
-            //if there is a previous element remove class from him
-            // give class to current element
-            // input.value = currentElement.HTML
+          let goUp = () => {
+            let startElement = document.activeElement;
+            let moveElement = pArray[pArray.indexOf(startElement) - 1];
+
+            if (moveElement) {
+              moveElement.className = "arrowElements";
+              startElement.classList.remove("arrowElements");
+              moveElement.focus();
+              input.value = moveElement.innerHTML;
+            }
           };
         });
       };
@@ -331,4 +327,3 @@ input.addEventListener("keyup", () => {
 
 //button.appendChild toggle problem
 //keybord arrow down to go down and arrow up to go up
-//if knows author => fill input.value
