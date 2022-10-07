@@ -104,6 +104,7 @@ const getAutocomplete = debounce(() => {
             let firstElement = pArray[0];
             firstElement.focus();
             firstElement.className = "arrowElements";
+            input.value = firstElement.innerHTML;
 
             pArray.forEach((p) =>
               p.addEventListener("keydown", (e) => {
