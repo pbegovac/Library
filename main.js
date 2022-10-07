@@ -83,8 +83,6 @@ const getAutocomplete = debounce(() => {
             (bookTitle) => bookTitle.title === input.value
           );
 
-          console.log(bookTitle);
-
           if (cover && bookTitle) {
             authorInput.value = bookTitle.author_name[0];
             pages.value = bookTitle.number_of_pages_median;
@@ -242,16 +240,17 @@ let getCover = (book, newDiv) => {
     .then((data) => {
       console.log(data);
 
-      //some books  dont have this data.docs => TypeError: Cannot read properties of undefined (reading '0')
-      const authorName = data.docs.find(
-        (authorName) => authorName.author_name[0] === authorInput.value
-      );
-
       const cover = data.docs.find((cover) =>
         cover.hasOwnProperty("cover_edition_key")
       );
 
-      if (authorName && cover) {
+      const bookTitle = data.docs.find(
+        (bookTitle) => bookTitle.title === input.value
+      );
+
+      console.log(bookTitle);
+
+      if (bookTitle === cover) {
         let bookCover = cover.cover_edition_key;
         newDiv.style.backgroundImage =
           "url('https://covers.openlibrary.org/b/olid/" +
@@ -272,7 +271,7 @@ let getCover = (book, newDiv) => {
         newDiv.appendChild(sentenceP);
         sentenceP.style.display = "none";
 
-        if (authorName && cover) {
+        if (bookTitle === cover) {
           if ((newDiv.style.backgroundImage = toggle)) {
             let bookCover = cover.cover_edition_key;
             newDiv.style.backgroundImage =
@@ -283,7 +282,7 @@ let getCover = (book, newDiv) => {
             sentenceP.style.display = "none";
           } else {
             newDiv.style.backgroundImage = "url('paper.jpg')";
-            if (authorName.hasOwnProperty("first_sentence")) {
+            if (bookTitle.hasOwnProperty("first_sentence")) {
               sentenceP.style.display = "block";
               let sentence = document.createTextNode(
                 firstSentence.first_sentence[0]
@@ -324,6 +323,3 @@ clickForm();
 input.addEventListener("keyup", () => {
   autocomplete.style.display = "block";
 });
-
-//button.appendChild toggle problem
-//keybord arrow down to go down and arrow up to go up
