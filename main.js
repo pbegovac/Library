@@ -227,13 +227,15 @@ let clickForm = () => {
   });
 };
 
-let getCover = (book, newDiv) => {
+let getCover = (a, b) => {
   let pInfo = document.createElement("p");
-  let pText = document.createTextNode(book.info());
+  let pText = document.createTextNode(a.info());
+
+  console.log(a.info());
 
   pInfo.appendChild(pText);
   pInfo.style.fontFamily = "Caveat";
-  newDiv.appendChild(pInfo);
+  b.appendChild(pInfo);
   pInfo.style.display = "none";
 
   fetch("https://openlibrary.org/search.json?q=" + input.value)
@@ -249,16 +251,14 @@ let getCover = (book, newDiv) => {
         (bookTitle) => bookTitle.title === input.value
       );
 
-      console.log(bookTitle);
-
-      if (bookTitle === cover) {
+      if (cover && bookTitle === cover) {
         let bookCover = cover.cover_edition_key;
-        newDiv.style.backgroundImage =
+        b.style.backgroundImage =
           "url('https://covers.openlibrary.org/b/olid/" +
           bookCover +
           "-M.jpg')";
       } else {
-        newDiv.style.backgroundImage = "url('default_book_cover.jpg')";
+        b.style.backgroundImage = "url('default_book_cover.jpg')";
       }
 
       const firstSentence = data.docs.find((sentence) =>
@@ -269,27 +269,27 @@ let getCover = (book, newDiv) => {
       let toggleBackground = () => {
         let sentenceP = document.createElement("p");
         sentenceP.className = "fit";
-        newDiv.appendChild(sentenceP);
+        b.appendChild(sentenceP);
         sentenceP.style.display = "none";
 
-        if (bookTitle === cover) {
-          if ((newDiv.style.backgroundImage = toggle)) {
+        if (cover && bookTitle === cover) {
+          if ((b.style.backgroundImage = toggle)) {
             let bookCover = cover.cover_edition_key;
-            newDiv.style.backgroundImage =
+            b.style.backgroundImage =
               "url('https://covers.openlibrary.org/b/olid/" +
               bookCover +
               "-M.jpg')";
             pInfo.style.display = "none";
             sentenceP.style.display = "none";
           } else {
-            newDiv.style.backgroundImage = "url('paper.jpg')";
+            b.style.backgroundImage = "url('paper.jpg')";
             if (bookTitle.hasOwnProperty("first_sentence")) {
               sentenceP.style.display = "block";
               let sentence = document.createTextNode(
                 firstSentence.first_sentence[0]
               );
               sentenceP.appendChild(sentence);
-              newDiv.addEventListener("click", () => {
+              b.addEventListener("click", () => {
                 sentenceP.style.display = "none";
               });
             } else {
@@ -298,19 +298,19 @@ let getCover = (book, newDiv) => {
           }
           toggle = !toggle;
         } else {
-          if ((newDiv.style.backgroundImage = toggle)) {
-            newDiv.style.backgroundImage = "url('default_book_cover.jpg')";
+          if ((b.style.backgroundImage = toggle)) {
+            b.style.backgroundImage = "url('default_book_cover.jpg')";
             pInfo.style.display = "none";
             sentenceP.style.display = "none";
           } else {
-            newDiv.style.backgroundImage = "url('paper.jpg')";
+            b.style.backgroundImage = "url('paper.jpg')";
             pInfo.style.display = "block";
           }
           toggle = !toggle;
         }
       };
 
-      newDiv.addEventListener("click", toggleBackground, false);
+      b.addEventListener("click", toggleBackground, false);
     });
 };
 
