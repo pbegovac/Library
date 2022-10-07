@@ -131,9 +131,9 @@ const getAutocomplete = debounce(() => {
             let moveElement = pArray[pArray.indexOf(startElement) + 1];
 
             if (moveElement) {
+              moveElement.focus();
               moveElement.className = "arrowElements";
               startElement.classList.remove("arrowElements");
-              moveElement.focus();
               input.value = moveElement.innerHTML;
             }
           };
@@ -143,9 +143,9 @@ const getAutocomplete = debounce(() => {
             let moveElement = pArray[pArray.indexOf(startElement) - 1];
 
             if (moveElement) {
+              moveElement.focus();
               moveElement.className = "arrowElements";
               startElement.classList.remove("arrowElements");
-              moveElement.focus();
               input.value = moveElement.innerHTML;
             }
           };
@@ -288,6 +288,7 @@ let getCover = (a, b) => {
               let sentence = document.createTextNode(
                 firstSentence.first_sentence[0]
               );
+              sentenceP.style.fontFamily = "Caveat";
               sentenceP.appendChild(sentence);
               b.addEventListener("click", () => {
                 sentenceP.style.display = "none";
