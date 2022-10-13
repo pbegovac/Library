@@ -1,6 +1,6 @@
 let myLibrary = [];
 let titles = [];
-let authors = [];
+
 const form = document.querySelector(".form");
 const addbook = document.querySelector(".addbook");
 const closeForm = document.querySelector(".closeForm");
@@ -34,15 +34,18 @@ closeForm.addEventListener("click", () => {
   read.checked = false;
 });
 
-function Book(title, author, pages, read) {
-  this.title = title;
-  this.author = author;
-  this.pages = pages;
-  this.read = read;
-  this.info = function () {
+let book = (title, author, pages, read) => {
+  const info = () => {
     return title + " " + author + " " + "Pages: " + pages;
   };
-}
+  return {
+    title,
+    author,
+    pages,
+    read,
+    info,
+  };
+};
 
 const debounce = (callback, wait) => {
   let timeoutId = null;
@@ -162,14 +165,14 @@ let clickForm = () => {
 
     let formValue = e.target;
 
-    let book = new Book(
+    let newbook = book(
       formValue.book.value,
       formValue.author.value,
       formValue.pages.value,
       formValue.read.checked
     );
 
-    myLibrary.push(book.info());
+    myLibrary.push(newbook.info());
 
     const newDiv = document.createElement("div");
     const buttonsDiv = document.createElement("div");
@@ -195,7 +198,7 @@ let clickForm = () => {
     readButton.className = "buttons";
     buttonsDiv.className = "buttonsDiv";
 
-    getCover(book, newDiv);
+    getCover(newbook, newDiv);
 
     cards.appendChild(newDiv);
     formValue.read.checked
